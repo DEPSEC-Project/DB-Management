@@ -1,3 +1,4 @@
+
 """
 Fichier setup pour rendre le projet installable via pip
 """
@@ -10,3 +11,4 @@ setup(
     packages=find_packages(),
     install_requires=["flask_sqlalchemy"],
 )
+
