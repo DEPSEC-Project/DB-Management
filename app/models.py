@@ -1,3 +1,4 @@
+# pylint: disable=R0903
 from datetime import datetime
 
 from .extensions import db
