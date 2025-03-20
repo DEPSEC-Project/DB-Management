@@ -1,5 +1,7 @@
 from datetime import datetime
-from app.extensions import db
+
+from .extensions import db
+
 
 # User model
 class User(db.Model):

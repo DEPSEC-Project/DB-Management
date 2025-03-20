@@ -8,21 +8,21 @@ class Config:
 	JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', 'enormemotdepasse')
 
 class DevelopmentConfig(Config): 
-    FLASK_ENV = 'development'
-    DEBUG = True
-    SQLALCHEMY_DATABASE_URI = os.getenv('DEV_DATABASE_URL', 'postgresql://user:password@db:5432/basededev')
+	FLASK_ENV = 'development'
+	DEBUG = True
+	SQLALCHEMY_DATABASE_URI = os.getenv('DEV_DATABASE_URL', 'postgresql://user:password@db:5432/basededev')
 
 class TestingConfig(Config):
-    FLASK_ENV = 'testing'
-    TESTING = True
-    SQLALCHEMY_DATABASE_URI = os.getenv('TEST_DATABASE_URL', 'postgresql://user:password@db:5432/basedeprod')
+	FLASK_ENV = 'testing'
+	TESTING = True
+	SQLALCHEMY_DATABASE_URI = os.getenv('TEST_DATABASE_URL', 'postgresql://user:password@db:5432/basedeprod')
 
 class ProductionConfig(Config):
-    FLASK_ENV = 'production'
-    SQLALCHEMY_DATABASE_URI = os.getenv('PROD_DATABASE_URL', 'postgresql://user:password@db:5432/basedeprod')
+	FLASK_ENV = 'production'
+	SQLALCHEMY_DATABASE_URI = os.getenv('PROD_DATABASE_URL', 'postgresql://user:password@db:5432/basedeprod')
 
 config = { #dictionnaire des confs
-    'development': DevelopmentConfig,
-    'testing': TestingConfig,
-    'production': ProductionConfig
+	'development': DevelopmentConfig,
+	'testing': TestingConfig,
+	'production': ProductionConfig
 }
