@@ -1,4 +1,7 @@
 # pylint: disable=R0903
+"""
+Fichier contenant les models de la bbd
+"""
 from datetime import datetime
 
 from .extensions import db

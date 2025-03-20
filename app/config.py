@@ -1,9 +1,8 @@
 # pylint: disable=R0903
-import os
-
 """
 Gere la configuration de l'application flask (mdp jwt, ect)
 """
+import os
 
 
 class Config:

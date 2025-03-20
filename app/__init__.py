@@ -1,3 +1,6 @@
+"""
+Fichier qui initialise l'application Flask
+"""
 from flask import Flask
 
 from app.config import Config

@@ -1,3 +1,6 @@
+"""
+Fichier qui lance l'application
+"""
 from flask import Flask, jsonify, render_template
 
 from app import create_app
