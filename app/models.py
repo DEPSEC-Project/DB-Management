@@ -1,8 +1,17 @@
+# pylint: disable=R0903
+"""
+Fichier contenant les models de la bbd
+"""
 from datetime import datetime
-from app.extensions import db
+
+from .extensions import db
+
 
 # User model
 class User(db.Model):
+	"""
+	Model de User
+	"""
 	__tablename__ = 'users'
 
 	id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
@@ -11,4 +20,3 @@ class User(db.Model):
 	password_hash = db.Column(db.String(255), nullable=False)
 	full_name = db.Column(db.String(255), nullable=True)
 	name = db.Column(db.String(255), nullable=True)
-
