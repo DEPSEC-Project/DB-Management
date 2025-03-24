@@ -1,5 +1,5 @@
 from datetime import datetime
-from app.extensions import db
+from depsec_db.extensions import db
 
 # User model
 class User(db.Model):
