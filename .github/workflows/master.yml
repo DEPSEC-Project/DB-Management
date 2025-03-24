@@ -35,7 +35,6 @@ jobs:
       #    flask db upgrade
 
       - name: Release avec semantic-release
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: |
-          semantic-release publish
+        uses: python-semantic-release/python-semantic-release@v9.21.0
+        with:
+          github_token: ${{ secrets.GH_TOKEN }}
