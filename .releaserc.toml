@@ -1,0 +1,4 @@
+[tool.semantic_release]
+branch = "master" # ou "main" selon votre branche principale
+version_variable = "setup.py:__version__"
+commit_message = "chore(release): create new version {version}"
