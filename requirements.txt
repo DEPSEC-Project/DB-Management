@@ -2,3 +2,5 @@ flask_sqlalchemy
 flask_migrate
 psycopg2-binary
 setuptools
+python-semantic-release
+
