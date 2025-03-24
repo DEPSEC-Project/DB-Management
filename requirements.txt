@@ -1,9 +1,4 @@
 flask_sqlalchemy
 flask_migrate
-<<<<<<< Updated upstream
 psycopg2-binary
-=======
-psycopg2-binary
-setuptools>=42
-
->>>>>>> Stashed changes
+setuptools
