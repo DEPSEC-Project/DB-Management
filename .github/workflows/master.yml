@@ -28,7 +28,7 @@ jobs:
 
       - name: Exécution de Pylint
         run: |
-          pylint $(git ls-files '*.py') --ignore=migrations
+          pylint $(find . -name "*.py" -not -path "./migrations/*") --disable=
 
       - name: Migration de la base de données
         run: |
