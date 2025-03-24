@@ -30,9 +30,9 @@ jobs:
         run: |
           pylint $(find . -name "*.py" -not -path "./migrations/*") --disable=W
 
-      - name: Migration de la base de données
-        run: |
-          flask db upgrade
+      #- name: Migration de la base de données
+      #  run: |
+      #    flask db upgrade
 
       - name: Release avec semantic-release
         env:
