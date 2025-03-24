@@ -3,9 +3,7 @@
 Fichier contenant les models de la bbd
 """
 from datetime import datetime
-
-from .extensions import db
-
+from depsec_db.extensions import db
 
 # User model
 class User(db.Model):

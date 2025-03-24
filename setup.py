@@ -5,8 +5,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="depsec_models",
-    version="0.2",
-    packages=["depsec_db"],
-    package_dir={"depsec_db": "app"},
+    version="0.3",
+    packages=find_packages(),
     install_requires=["flask_sqlalchemy"],
 )

@@ -1,6 +1,4 @@
 flask_sqlalchemy
 flask_migrate
 psycopg2-binary
-setuptools>=42
-git+https://github.com/DEPSEC-Project/DB-Management.git@master
-
+setuptools

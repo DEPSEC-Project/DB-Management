@@ -3,10 +3,9 @@ Fichier qui initialise l'application Flask
 """
 from flask import Flask
 
-from app.config import Config
-from app.extensions import db, migrate
-from app.models import User
-
+from depsec_db.config import Config
+from depsec_db.extensions import db, migrate
+from depsec_db.models import User
 
 def create_app():
 	"""
