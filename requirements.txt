@@ -1,5 +1,6 @@
 flask_sqlalchemy
 flask_migrate
 psycopg2-binary
-setuptools>=42
+setuptools
 python-semantic-release
+
