@@ -8,13 +8,9 @@ from flask import current_app
 # Ceci est l'objet de configuration Alembic, qui permet d'accéder aux valeurs dans le fichier .ini.
 config = context.config
 
-# Récupération de l'URL de la base de données depuis les variables d'environnement
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://dev_user:motdepassetest@localhost:5433/dev_db")
-
 # Interprète le fichier de configuration pour la gestion des logs.
 fileConfig(config.config_file_name)
 logger = logging.getLogger('alembic.env')
-
 
 def get_engine():
     """Retourne l'objet Engine pour la base de données."""
@@ -25,14 +21,12 @@ def get_engine():
         # Fonction pour Flask-SQLAlchemy>=3
         return current_app.extensions['migrate'].db.engine
 
-
 def get_engine_url():
     """Retourne l'URL de la base de données, en utilisant la variable d'environnement appropriée."""
-    try:
-        return DATABASE_URL.replace('%', '%%')
-    except AttributeError:
-        return str(DATABASE_URL).replace('%', '%%')
-
+    db_url = os.getenv('DATABASE_URL')  # Utilisation de la variable d'environnement DATABASE_URL
+    if not db_url:
+        raise ValueError("La variable d'environnement DATABASE_URL n'est pas définie.")
+    return db_url.replace('%', '%%')
 
 # Ajoutez ici l'objet Metadata de votre modèle pour que 'autogenerate' fonctionne
 # Exemple: from myapp import mymodel
@@ -40,13 +34,11 @@ def get_engine_url():
 config.set_main_option('sqlalchemy.url', get_engine_url())
 target_db = current_app.extensions['migrate'].db
 
-
 def get_metadata():
     """Retourne la metadata du modèle."""
     if hasattr(target_db, 'metadatas'):
         return target_db.metadatas[None]
     return target_db.metadata
-
 
 def run_migrations_offline():
     """Exécute les migrations en mode 'offline'."""
@@ -57,7 +49,6 @@ def run_migrations_offline():
 
     with context.begin_transaction():
         context.run_migrations()
-
 
 def run_migrations_online():
     """Exécute les migrations en mode 'online'."""
@@ -85,7 +76,6 @@ def run_migrations_online():
 
         with context.begin_transaction():
             context.run_migrations()
-
 
 # Exécute les migrations en mode 'offline' ou 'online' en fonction du mode
 if context.is_offline_mode():
