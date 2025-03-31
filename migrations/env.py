@@ -9,7 +9,7 @@ from flask import current_app
 config = context.config
 
 # Récupération de l'URL de la base de données depuis les variables d'environnement
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://dev_user:password@localhost:5433/dev_db")
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://dev_user:motdepassetest@localhost:5433/dev_db")
 
 # Interprète le fichier de configuration pour la gestion des logs.
 fileConfig(config.config_file_name)

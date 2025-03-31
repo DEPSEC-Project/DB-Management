@@ -48,7 +48,7 @@ jobs:
           echo "PostgreSQL est prêt."
       
       - name: Définir la variable DATABASE_URL
-        run: echo "DATABASE_URL=postgresql://dev_user:password@localhost:5433/dev_db" >> $GITHUB_ENV
+        run: echo "DATABASE_URL=postgresql://dev_user:motdepassetest@localhost:5433/dev_db" >> $GITHUB_ENV
       
       - name: Exécution de Pylint
         run: pylint $(find . -name "*.py" -not -path "./migrations/*") --disable=W
