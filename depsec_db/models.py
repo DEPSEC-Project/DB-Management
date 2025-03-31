@@ -3,7 +3,9 @@
 Fichier contenant les models de la bbd
 """
 from datetime import datetime
+
 from depsec_db.extensions import db
+
 
 # User model
 class User(db.Model):
@@ -18,3 +20,14 @@ class User(db.Model):
 	password_hash = db.Column(db.String(255), nullable=False)
 	full_name = db.Column(db.String(255), nullable=True)
 	name = db.Column(db.String(255), nullable=True)
+
+class TrivyReport(db.Model):
+    __tablename__ = 'trivy_reports'
+    
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    schema_version = db.Column(db.Integer, nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False)
+    artifact_name = db.Column(db.String, nullable=False)
+    artifact_type = db.Column(db.String, nullable=False)
+    metadata = db.Column(db.JSON, nullable=True)
+    results = db.Column(db.JSON, nullable=True)
