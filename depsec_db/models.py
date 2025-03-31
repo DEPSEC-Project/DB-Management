@@ -6,7 +6,7 @@ Ces modèles sont conçus pour être utilisés dans une application Flask extern
 
 import uuid
 from werkzeug.security import generate_password_hash, check_password_hash
-from sqlalchemy import func
+from sqlalchemy import func as sa_func
 from depsec_db.extensions import db
 
 
@@ -15,16 +15,29 @@ class User(db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
-    public_id = db.Column(db.String(36), unique=True, nullable=False, default=lambda: str(uuid.uuid4()))
+    public_id = db.Column(
+		db.String(36),
+		unique=True,
+		nullable=False,
+		default=lambda: str(uuid.uuid4())
+	)
     username = db.Column(db.String(255), unique=True, nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
     full_name = db.Column(db.String(255), nullable=True)
     name = db.Column(db.String(255), nullable=True)
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
-    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
-    updated_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
-
+    created_at = db.Column(
+		db.DateTime(timezone=True),
+		server_default=sa_func.now(),
+		nullable=False
+	)
+    updated_at = db.Column(
+		db.DateTime(timezone=True),
+		server_default=sa_func.now(),
+		onupdate=sa_func.now(),
+		nullable=False
+	)
     def set_password(self, password: str) -> None:
         """Hash et définit le mot de passe de l'utilisateur."""
         self.password_hash = generate_password_hash(password)
@@ -40,7 +53,7 @@ class TokenBlacklist(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     jti = db.Column(db.String(36), unique=True, nullable=False)
-    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True), server_default=sa_func.now(), nullable=False)
 
     @classmethod
     def is_token_blacklisted(cls, jti: str, session=None) -> bool:
@@ -55,7 +68,11 @@ class TrivyReport(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     schema_version = db.Column(db.Integer, nullable=False)
-    created_at = db.Column(db.DateTime(timezone=True), nullable=False, server_default=func.now())
+    created_at = db.Column(
+		db.DateTime(timezone=True),
+		server_default=sa_func.now(),  
+		nullable=False
+	)
     artifact_name = db.Column(db.String, nullable=False)
     artifact_type = db.Column(db.String, nullable=False)
     report_metadata = db.Column(db.JSON, nullable=True)
