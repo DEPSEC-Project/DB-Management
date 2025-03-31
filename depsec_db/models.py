@@ -32,5 +32,5 @@ class TrivyReport(db.Model):
     created_at = db.Column(db.DateTime, nullable=False)
     artifact_name = db.Column(db.String, nullable=False)
     artifact_type = db.Column(db.String, nullable=False)
-    metadata = db.Column(db.JSON, nullable=True)
+    report_metadata = db.Column(db.JSON, nullable=True)
     results = db.Column(db.JSON, nullable=True)
