@@ -3,12 +3,11 @@ name: Workflow Master
 on:
   push:
     branches:
-      - 'master'
+      - 'main'
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout du code
         uses: actions/checkout@v3
@@ -21,13 +20,34 @@ jobs:
       - name: Installation des dépendances
         run: |
           python -m pip install --upgrade pip
-          pip install pylint flask sqlalchemy flask-migrate
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install -r requirements.txt
+          pip install pylint flask flask_sqlalchemy flask_migrate psycopg2-binary
+      
+      - name: Vérification de PostgreSQL
+        run: |
+          echo "Attente de PostgreSQL..."
+          until PGPASSWORD=${{ secrets.POSTGRES_PASSWORD_MAIN }} psql -h 51.255.51.83 -p 5435 -U prod_user -d prod_db -c '\q'; do
+            sleep 1
+          done
+          echo "PostgreSQL est prêt."
+      
+      - name: Définir la variable DATABASE_URL
+        run: |
+          echo "DATABASE_URL=postgresql://prod_user:${{ secrets.POSTGRES_PASSWORD_MAIN }}@51.255.51.83:5435/prod_db" >> $GITHUB_ENV
       
       - name: Exécution de Pylint
-        run: |
-          pylint $(git ls-files '*.py') --ignore=migrations
+        run: pylint $(find . -name "*.py" -not -path "./migrations/*") --disable=W
       
-      - name: Migration de la base de données
+      - name: Lancer les migrations
         run: |
+          flask db stamp head  # Marque la base comme étant à jour
+          flask db migrate -m "Mise à jour de la base de données"
           flask db upgrade
+      
+      - name: Appliquer les migrations de la base de données
+        run: flask db upgrade
+
+      - name: Release avec semantic-release
+        uses: python-semantic-release/python-semantic-release@v9.21.0
+        with:
+          github_token: ${{ secrets.GH_TOKEN }}
