@@ -33,7 +33,7 @@ jobs:
           echo "PostgreSQL est prêt."
       
       - name: Définir la variable DATABASE_URL
-        run: echo "DATABASE_URL=postgresql://test_user:${{ secrets.POSTGRES_PASSWORD_TEST }}@51.255.51.83:5433/test_db" >> $GITHUB_ENV
+        run: echo "DATABASE_URL=postgresql://test_user:${{ secrets.POSTGRES_PASSWORD_TEST }}@51.255.51.83:5434/test_db" >> $GITHUB_ENV
       
       - name: Lancer les migrations
         run: |
