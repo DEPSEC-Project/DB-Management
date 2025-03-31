@@ -26,7 +26,7 @@ class TrivyReport(db.Model):
 	Model du Rapport Trivy
 	"""
     __tablename__ = 'trivy_reports'
-    
+
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     schema_version = db.Column(db.Integer, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False)
