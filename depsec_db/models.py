@@ -53,7 +53,7 @@ class TokenBlacklist(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     jti = db.Column(db.String(36), unique=True, nullable=False)
-    created_at = db.Column(db.DateTime(timezone=True), server_default=sa_func.now(), nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True), server_default=sa_func.now(), nullable=False) # pylint: disable=not-callable
 
     @classmethod
     def is_token_blacklisted(cls, jti: str, session=None) -> bool:
