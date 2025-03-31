@@ -22,6 +22,9 @@ class User(db.Model):
 	name = db.Column(db.String(255), nullable=True)
 
 class TrivyReport(db.Model):
+    """
+	Model du Rapport Trivy
+	"""
     __tablename__ = 'trivy_reports'
     
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
