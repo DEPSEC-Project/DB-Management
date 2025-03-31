@@ -11,25 +11,35 @@ from sqlalchemy.sql import func
 from depsec_db.extensions import db
 
 class User(db.Model):
+    """Modèle utilisateur principal pour l'authentification."""
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
-    public_id = db.Column(db.String(36), unique=True, nullable=False, default=lambda: str(uuid.uuid4()))
+    public_id = db.Column(db.String(36),
+                           	unique=True,
+                        	nullable=False,
+                           	default=lambda: str(uuid.uuid4()))
+    
     username = db.Column(db.String(50), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
     created_at = db.Column(db.DateTime(), server_default=func.now(), nullable=False)
-    updated_at = db.Column(db.DateTime(), onupdate=func.now(), server_default=func.now(), nullable=False)
+    updated_at = db.Column(db.DateTime(),
+                        	onupdate=func.now(), 
+                           	server_default=func.now(),
+                            nullable=False)
 
     def set_password(self, password):
+        """Hash et définit le mot de passe de l'utilisateur."""
         self.password_hash = generate_password_hash(password)
 
-    def check_password(self, password):
+    def check_password(self, password) :
+        """Vérifie la correspondance du mot de passe fourni avec le haché."""
         return check_password_hash(self.password_hash, password)
 
-
 class TokenBlacklist(db.Model):
+    """Modèle pour stocker les JWT révoqués (blacklistés)."""
     __tablename__ = 'token_blacklist'
 
     id = db.Column(db.Integer, primary_key=True)
