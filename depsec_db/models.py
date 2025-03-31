@@ -29,13 +29,13 @@ class User(db.Model):
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
     created_at = db.Column(
 		db.DateTime(timezone=True),
-		server_default=sa_func.now(),
+		server_default=sa_func.now(), # pylint: disable=not-callable
 		nullable=False
 	)
     updated_at = db.Column(
 		db.DateTime(timezone=True),
-		server_default=sa_func.now(),
-		onupdate=sa_func.now(),
+		server_default=sa_func.now(), # pylint: disable=not-callable
+		onupdate=sa_func.now(), # pylint: disable=not-callable
 		nullable=False
 	)
     def set_password(self, password: str) -> None:
@@ -70,7 +70,7 @@ class TrivyReport(db.Model):
     schema_version = db.Column(db.Integer, nullable=False)
     created_at = db.Column(
 		db.DateTime(timezone=True),
-		server_default=sa_func.now(),  
+		server_default=sa_func.now(),# pylint: disable=not-callable
 		nullable=False
 	)
     artifact_name = db.Column(db.String, nullable=False)
