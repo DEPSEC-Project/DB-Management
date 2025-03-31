@@ -9,21 +9,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:13
-        env:
-          POSTGRES_USER: dev_user
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD_TEST }}  # Utilisation du secret
-          POSTGRES_DB: dev_db
-        ports:
-          - 5433:5432
-        options: >-
-          --health-cmd "pg_isready -U dev_user -d dev_db"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     steps:
       - name: Checkout du code
         uses: actions/checkout@v3
@@ -42,7 +27,7 @@ jobs:
       - name: Vérification de PostgreSQL
         run: |
           echo "Attente de PostgreSQL..."
-          until PGPASSWORD=${{ secrets.POSTGRES_PASSWORD_TEST }} psql -h 51.255.51.83 -U dev_user -d dev_db -c '\q'; do
+          until PGPASSWORD=${{ secrets.POSTGRES_PASSWORD_TEST }} psql -h 51.255.51.83 -p 5433 -U dev_user -d dev_db -c '\q'; do
             sleep 1
           done
           echo "PostgreSQL est prêt."

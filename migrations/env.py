@@ -5,15 +5,15 @@ from logging.config import fileConfig
 from alembic import context
 from flask import current_app
 
-# Ceci est l'objet de configuration Alembic, qui permet d'accéder aux valeurs dans le fichier .ini.
 config = context.config
-
-# Interprète le fichier de configuration pour la gestion des logs.
 fileConfig(config.config_file_name)
 logger = logging.getLogger('alembic.env')
 
 def get_engine():
-    """Retourne l'objet Engine pour la base de données."""
+    """
+    Retourne l'objet Engine pour la base de données.
+    """
+    
     try:
         # Fonction pour Flask-SQLAlchemy<3 et Alchemical
         return current_app.extensions['migrate'].db.get_engine()
@@ -28,9 +28,6 @@ def get_engine_url():
         raise ValueError("La variable d'environnement DATABASE_URL n'est pas définie.")
     return db_url.replace('%', '%%')
 
-# Ajoutez ici l'objet Metadata de votre modèle pour que 'autogenerate' fonctionne
-# Exemple: from myapp import mymodel
-# target_metadata = mymodel.Base.metadata
 config.set_main_option('sqlalchemy.url', get_engine_url())
 target_db = current_app.extensions['migrate'].db
 
