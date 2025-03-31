@@ -8,6 +8,9 @@ from flask import current_app
 # Ceci est l'objet de configuration Alembic, qui permet d'accéder aux valeurs dans le fichier .ini.
 config = context.config
 
+# Récupération de l'URL de la base de données depuis les variables d'environnement
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://dev_user:password@localhost:5433/dev_db")
+
 # Interprète le fichier de configuration pour la gestion des logs.
 fileConfig(config.config_file_name)
 logger = logging.getLogger('alembic.env')
@@ -25,11 +28,10 @@ def get_engine():
 
 def get_engine_url():
     """Retourne l'URL de la base de données, en utilisant la variable d'environnement appropriée."""
-    db_url = os.getenv('DATABASE_URL', 'postgresql://dev_user:motdepassetest@localhost:5433/dev_db')
     try:
-        return db_url.replace('%', '%%')
+        return DATABASE_URL.replace('%', '%%')
     except AttributeError:
-        return str(db_url).replace('%', '%%')
+        return str(DATABASE_URL).replace('%', '%%')
 
 
 # Ajoutez ici l'objet Metadata de votre modèle pour que 'autogenerate' fonctionne

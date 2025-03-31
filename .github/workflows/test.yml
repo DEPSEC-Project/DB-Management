@@ -9,6 +9,21 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_USER: dev_user
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: dev_db
+        ports:
+          - 5433:5432
+        options: >-
+          --health-cmd "pg_isready -U dev_user -d dev_db"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - name: Checkout du code
         uses: actions/checkout@v3
@@ -21,17 +36,25 @@ jobs:
       - name: Installation des dépendances
         run: |
           python -m pip install --upgrade pip
-          pip install pylint flask sqlalchemy flask-migrate
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install -r requirements.txt
+          pip install pylint flask flask_sqlalchemy flask_migrate psycopg2-binary
+      
+      - name: Vérification de PostgreSQL
+        run: |
+          echo "Attente de PostgreSQL..."
+          until PGPASSWORD=password psql -h localhost -U dev_user -d dev_db -c '\q'; do
+            sleep 1
+          done
+          echo "PostgreSQL est prêt."
+      
+      - name: Définir la variable DATABASE_URL
+        run: echo "DATABASE_URL=postgresql://dev_user:password@localhost:5433/dev_db" >> $GITHUB_ENV
       
       - name: Exécution de Pylint
-        run: |
-          pylint $(find . -name "*.py" -not -path "./migrations/*") --disable=W
+        run: pylint $(find . -name "*.py" -not -path "./migrations/*") --disable=W
       
       - name: Générer les migrations de la base de données
-        run: |
-          flask db migrate -m "Mise à jour de la base de données"
+        run: flask db migrate -m "Mise à jour de la base de données"
       
       - name: Appliquer les migrations de la base de données
-        run: |
-          flask db upgrade
+        run: flask db upgrade
