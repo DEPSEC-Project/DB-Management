@@ -3,7 +3,7 @@ name: Workflow Master
 on:
   push:
     branches:
-      - 'master'
+      - 'main'
 
 jobs:
   build:
@@ -48,8 +48,6 @@ jobs:
         run: flask db upgrade
 
       - name: Release avec semantic-release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          pip install python-semantic-release
-          semantic-release publish
+        uses: python-semantic-release/python-semantic-release@v9.21.0
+        with:
+          github_token: ${{ secrets.GH_TOKEN }}
