@@ -68,11 +68,14 @@ class TrivyReport(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     schema_version = db.Column(db.Integer, nullable=False)
+    
     created_at = db.Column(
-		db.DateTime(timezone=True),
-		server_default=sa_func.now(),# pylint: disable=not-callable
-		nullable=False
-	)
+        db.DateTime(timezone=True),
+        server_default=sa_func.now(),  # Utilisé quand la BDD gère l'insertion
+        default=sa_func.now(),  # ✅ Utilisé quand SQLAlchemy insère l'objet
+        nullable=False
+    )
+
     artifact_name = db.Column(db.String, nullable=False)
     artifact_type = db.Column(db.String, nullable=False)
     report_metadata = db.Column(db.JSON, nullable=True)
@@ -94,3 +97,4 @@ class SBOM(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     project_id = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=False)
     sbom_data = db.Column(db.JSON, nullable=False)
+    
