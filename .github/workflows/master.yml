@@ -39,24 +39,26 @@ jobs:
 
       - name: Exécution de Pylint
         run: pylint $(find . -name "*.py" -not -path "./migrations/*") --disable=W
-
-      - name: Lancer les migrations
+      
+      - name: Vérifier et appliquer les migrations si besoin
         run: |
-          flask db migrate -m "Mise à jour de la base de données"
-          flask db upgrade
-
-      - name: Commit des changements de migration
-        run: |
-          git config --local user.email "migrations@depsec.org"
-          git config --local user.name "Migrations"
-          git add --dry-run --ignore-missing migrations/versions/*.py
-          if [[ -n "$(git status --porcelain)" ]]; then
-            git commit -m "Ajout automatique des fichiers de migration"
-            echo "FICHIERS DE MIGRATION COMMITTÉS"
-            git remote set-url origin https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-            git push origin ${{ github.ref_name }}
+          echo "🔍 Vérification des changements dans les modèles..."
+          
+          flask db migrate -m "Migration auto" || true
+      
+          if git diff --quiet --exit-code -- migrations/versions; then
+            echo "✅ Aucun changement détecté. Pas de migration à appliquer."
           else
-            echo "AUCUN CHANGEMENT DE FICHIER DE MIGRATION À COMMITTER"
+            echo "📦 Migration détectée. Application..."
+            flask db upgrade
+      
+            echo "💾 Commit et push de la migration"
+            git config --local user.email "ci@depsec.org"
+            git config --local user.name "CI Migrations"
+            git add migrations/versions/*.py
+            git commit -m "Migration générée automatiquement"
+            git remote set-url origin https://${{ github.actor }}:${{ secrets.TOKEN }}@github.com/${{ github.repository }}
+            git push origin ${{ github.ref_name }}
           fi
       - name: Release avec semantic-release
         uses: python-semantic-release/python-semantic-release@v9.21.0
