@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.10.2 (2025-04-02)
+
+### Bug Fixes
+
+- Modification de la CI pour les upgrades
+  ([`ab23312`](https://github.com/DEPSEC-Project/DB-Management/commit/ab23312e0df5d49b1b3ef6f0c312bd4d7d472f2a))
+
+
 ## v0.10.1 (2025-04-02)
 
 ### Bug Fixes
