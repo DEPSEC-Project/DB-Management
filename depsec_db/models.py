@@ -14,7 +14,7 @@ class Project(db.Model):
     __tablename__ = 'projects'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     """Clé étrangère vers l'id de la table User"""
-    auteur_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    auteur_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     titre = db.Column(db.String, nullable=False)
     status = db.Column(db.String, nullable=False)
     path = db.Column(db.String, nullable=False)
