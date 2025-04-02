@@ -94,3 +94,4 @@ class SBOM(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     project_id = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=False)
     sbom_data = db.Column(db.JSON, nullable=False)
+	
