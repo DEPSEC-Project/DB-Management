@@ -41,7 +41,7 @@ jobs:
       
       - name: Lancer les migrations
         run: |
-          flask db stamp head  # Marque la base comme étant à jour
+          flask db stamp base  # Marque la base comme étant à jour
           flask db migrate -m "Mise à jour de la base de données"
           flask db upgrade
       
