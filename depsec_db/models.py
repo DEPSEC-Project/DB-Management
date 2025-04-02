@@ -97,6 +97,7 @@ class SBOM(db.Model):
     """
     Modèle d'un SBOM.
     """
+    __tablename__ = 'sbom'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    project_id = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=False)
+    project_id = db.Column(db.Integer, db.ForeignKey('projects.id'), nullable=False)
     sbom_data = db.Column(db.JSON, nullable=False)
