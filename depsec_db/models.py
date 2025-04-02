@@ -79,7 +79,8 @@ class TrivyReport(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     schema_version = db.Column(db.Integer, nullable=False)
-
+    """Clé étrangère vers l'id de la table SBOM"""
+    sbom_id = db.Column(db.Integer, db.ForeignKey('sboms.id'), nullable=False)
     created_at = db.Column(
         db.DateTime(timezone=True),
         server_default=sa_func.now(),  # pylint: disable=not-callable
@@ -97,7 +98,9 @@ class SBOM(db.Model):
     """
     Modèle d'un SBOM.
     """
-    __tablename__ = 'sbom'
+    __tablename__ = 'sboms'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     project_id = db.Column(db.Integer, db.ForeignKey('projects.id'), nullable=False)
     sbom_data = db.Column(db.JSON, nullable=False)
+    """Relation One-To-Many avec la table TrivyReport qui utilise l'id du SBOM"""
+    projects = db.relationship('TrivyReport', backref='sboms', lazy=True)
