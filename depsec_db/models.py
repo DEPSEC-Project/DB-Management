@@ -17,7 +17,7 @@ class Project(db.Model):
     titre = db.Column(db.String, nullable=False)
     auteur = db.Column(db.String, nullable=False)
     status = db.Column(db.String, nullable=False)
-    sbom = db.Column(db.String, nullable=False)
+    path = db.Column(db.String, nullable=False)
 
 class User(db.Model):
     """Modèle utilisateur principal pour l'authentification."""
