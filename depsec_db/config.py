@@ -3,7 +3,7 @@
 Gere la configuration de l'application flask (mdp jwt, ect)
 """
 import os
-
+from datetime import timedelta
 
 class Config:
 	"""
@@ -14,6 +14,8 @@ class Config:
 									 'postgresql://postgres:bonjour@localhost:9001/test_db')
 	SQLALCHEMY_TRACK_MODIFICATIONS = False
 	JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', 'enormemotdepasse')
+	JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=30)
+	JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=30)
 
 class DevelopmentConfig(Config):
 	"""
@@ -21,6 +23,7 @@ class DevelopmentConfig(Config):
     """
 	FLASK_ENV = 'development'
 	DEBUG = True
+	TWT_ACCESS_TOKEN_EXPIRES = timedelta(days=1)
 	SQLALCHEMY_DATABASE_URI = os.getenv('DEV_DATABASE_URL',
 									 'postgresql://user:password@db:5432/basededev')
 
