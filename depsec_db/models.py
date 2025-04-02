@@ -18,6 +18,15 @@ class Project(db.Model):
     titre = db.Column(db.String, nullable=False)
     status = db.Column(db.String, nullable=False)
     path = db.Column(db.String, nullable=False)
+    def to_dict(self):
+        """Function to return projects as JSON"""
+        return {
+            "id": self.id,
+            "auteur_id": self.auteur_id,
+            "titre": self.titre,
+            "status": self.status,
+            "path": self.path
+    }
 
 class User(db.Model):
     """Modèle utilisateur principal pour l'authentification."""
