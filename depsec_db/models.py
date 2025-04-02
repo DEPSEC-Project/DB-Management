@@ -77,3 +77,20 @@ class TrivyReport(db.Model):
     artifact_type = db.Column(db.String, nullable=False)
     report_metadata = db.Column(db.JSON, nullable=True)
     results = db.Column(db.JSON, nullable=True)
+
+
+class Project(db.Model):
+    """
+    Modèle d'un projet.
+    """
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(255), nullable=False)
+    version = db.Column(db.String(50), nullable=False)
+
+class SBOM(db.Model):
+    """
+    Modèle d'un SBOM.
+    """
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    project_id = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=False)
+    sbom_data = db.Column(db.JSON, nullable=False)
