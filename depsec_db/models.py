@@ -9,15 +9,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import func as sa_func
 from depsec_db.extensions import db
 
-class Project(db.Model):
-    """Modèle d'un projet."""
-    __tablename__ = 'projects'
-    
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    auteur_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # Clé étrangère vers l'id de la table User
-    titre = db.Column(db.String, nullable=False)
-    status = db.Column(db.String, nullable=False)
-    path = db.Column(db.String, nullable=False)
 
 class User(db.Model):
     """Modèle utilisateur principal pour l'authentification."""
@@ -47,9 +38,6 @@ class User(db.Model):
 		onupdate=sa_func.now(), # pylint: disable=not-callable
 		nullable=False
 	)
-    """Relation One-To-Many avec la table Project qui utilise l'id de User"""
-    projects = db.relationship('Project', backref='user', lazy=True)
-    
     def set_password(self, password: str) -> None:
         """Hash et définit le mot de passe de l'utilisateur."""
         self.password_hash = generate_password_hash(password)
