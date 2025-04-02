@@ -12,38 +12,51 @@ jobs:
     steps:
       - name: Checkout du code
         uses: actions/checkout@v3
-      
+
       - name: Installation de Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-      
+
       - name: Installation des dépendances
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install pylint flask flask_sqlalchemy flask_migrate psycopg2-binary
-      
+
       - name: Vérification de PostgreSQL
         run: |
-          echo "Attente de PostgreSQL..."
+          echo "Attente de PostgreSQL"
           until PGPASSWORD=${{ secrets.POSTGRES_PASSWORD_TEST }} psql -h 51.255.51.83 -p 5434 -U test_user -d test_db -c '\q'; do
             sleep 1
           done
           echo "PostgreSQL est prêt."
-      
+
       - name: Définir la variable DATABASE_URL
         run: |
           echo "DATABASE_URL=postgresql://test_user:${{ secrets.POSTGRES_PASSWORD_TEST }}@51.255.51.83:5434/test_db" >> $GITHUB_ENV
-      
+
       - name: Exécution de Pylint
         run: pylint $(find . -name "*.py" -not -path "./migrations/*") --disable=W
-      
-      - name: Lancer les migrations
+
+      - name: Vérifier et appliquer les migrations si besoin
         run: |
-          flask db stamp head  # Marque la base comme étant à jour
-          flask db migrate -m "Mise à jour de la base de données"
-          flask db upgrade
+          echo "🔍 Vérification des changements dans les modèles..."
+          
+          flask db migrate -m "Migration auto" || true
       
-      - name: Appliquer les migrations de la base de données
-        run: flask db upgrade
+          if git diff --quiet --exit-code -- migrations/versions; then
+            echo "✅ Aucun changement détecté. Pas de migration à appliquer."
+          else
+            echo "📦 Migration détectée. Application..."
+            flask db upgrade
+      
+            echo "💾 Commit et push de la migration"
+            git config --local user.email "ci@depsec.org"
+            git config --local user.name "CI Migrations"
+            git add migrations/versions/*.py
+            git commit -m "Migration générée automatiquement"
+            git remote set-url origin https://${{ github.actor }}:${{ secrets.TOKEN }}@github.com/${{ github.repository }}
+            git push origin ${{ github.ref_name }}
+          fi
+

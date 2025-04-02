@@ -6,7 +6,7 @@ Ces modèles sont conçus pour être utilisés dans une application Flask extern
 
 import uuid
 from werkzeug.security import generate_password_hash, check_password_hash
-from sqlalchemy import func
+from sqlalchemy import func as sa_func
 from depsec_db.extensions import db
 
 class Project(db.Model):
@@ -24,19 +24,31 @@ class User(db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
-    public_id = db.Column(db.String(36), unique=True, nullable=False, default=lambda: str(uuid.uuid4()))
+    public_id = db.Column(
+		db.String(36),
+		unique=True,
+		nullable=False,
+		default=lambda: str(uuid.uuid4())
+	)
     username = db.Column(db.String(255), unique=True, nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
     full_name = db.Column(db.String(255), nullable=True)
     name = db.Column(db.String(255), nullable=True)
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
-    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
-    updated_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
-
+    created_at = db.Column(
+		db.DateTime(timezone=True),
+		server_default=sa_func.now(), # pylint: disable=not-callable
+		nullable=False
+	)
+    updated_at = db.Column(
+		db.DateTime(timezone=True),
+		server_default=sa_func.now(), # pylint: disable=not-callable
+		onupdate=sa_func.now(), # pylint: disable=not-callable
+		nullable=False
+	)
     """Relation One-To-Many avec la table Project qui utilise l'id de User"""
     projects = db.relationship('Project', backref='user', lazy=True)
-
     
     def set_password(self, password: str) -> None:
         """Hash et définit le mot de passe de l'utilisateur."""
@@ -53,7 +65,7 @@ class TokenBlacklist(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     jti = db.Column(db.String(36), unique=True, nullable=False)
-    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True), server_default=sa_func.now(), nullable=False) # pylint: disable=not-callable
 
     @classmethod
     def is_token_blacklisted(cls, jti: str, session=None) -> bool:
@@ -68,8 +80,32 @@ class TrivyReport(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     schema_version = db.Column(db.Integer, nullable=False)
-    created_at = db.Column(db.DateTime(timezone=True), nullable=False, server_default=func.now())
+
+    created_at = db.Column(
+        db.DateTime(timezone=True),
+        server_default=sa_func.now(),  # pylint: disable=not-callable
+        default=sa_func.now(),  # pylint: disable=not-callable
+        nullable=False
+    )
+
     artifact_name = db.Column(db.String, nullable=False)
     artifact_type = db.Column(db.String, nullable=False)
     report_metadata = db.Column(db.JSON, nullable=True)
     results = db.Column(db.JSON, nullable=True)
+
+
+class Project(db.Model):
+    """
+    Modèle d'un projet.
+    """
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(255), nullable=False)
+    version = db.Column(db.String(50), nullable=False)
+
+class SBOM(db.Model):
+    """
+    Modèle d'un SBOM.
+    """
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    project_id = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=False)
+    sbom_data = db.Column(db.JSON, nullable=False)
