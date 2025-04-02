@@ -52,12 +52,12 @@ jobs:
         run: |
           git config --local user.email "${{ secrets.GITHUB_ACTIONS_EMAIL }}"
           git config --local user.name "GitHub Actions"
-          git add migrations/versions/*
+          git add migrations/versions/*.py
           if [[ -n "$(git status --porcelain)" ]]; then
             git commit -m "Ajout automatique des fichiers de migration"
             echo "FICHIERS DE MIGRATION COMMITTÉS"
             git remote set-url origin https://${{ github.actor }}:${{ secrets.TOKEN }}@github.com/${{ github.repository }}
-            git push origin development
+            git push origin ${{ github.ref_name }}
           else
             echo "AUCUN CHANGEMENT DE FICHIER DE MIGRATION À COMMITTER"
           fi
