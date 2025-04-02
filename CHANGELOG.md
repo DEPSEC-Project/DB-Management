@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.8.0 (2025-04-02)
+
+### Features
+
+- **trivyreport**: Ajout d'une clé étrangère pour id_sbom de trivyreport avec la table SBOM
+  ([`34ca141`](https://github.com/DEPSEC-Project/DB-Management/commit/34ca141e5d3bc183aa4e96e59832d87c566318fd))
+
+
 ## v0.7.1 (2025-04-02)
 
 ### Bug Fixes
