@@ -42,7 +42,7 @@ jobs:
       
       - name: Vérifier et appliquer les migrations si besoin
         run: |
-      
+          flask db upgrade
           if git diff --quiet --exit-code -- migrations/versions; then
             echo "✅ Aucun changement détecté. Pas de migration à appliquer."
           else
