@@ -68,11 +68,11 @@ class TrivyReport(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     schema_version = db.Column(db.Integer, nullable=False)
-    
+
     created_at = db.Column(
         db.DateTime(timezone=True),
-        server_default=sa_func.now(),  # Utilisé quand la BDD gère l'insertion
-        default=sa_func.now(),  # ✅ Utilisé quand SQLAlchemy insère l'objet
+        server_default=sa_func.now(),  # pylint: disable=not-callable
+        default=sa_func.now(),  # pylint: disable=not-callable
         nullable=False
     )
 
