@@ -60,8 +60,6 @@ jobs:
             git remote set-url origin https://${{ github.actor }}:${{ secrets.TOKEN }}@github.com/${{ github.repository }}
             git push origin ${{ github.ref_name }}
           fi
-
-
       - name: Release avec semantic-release
         uses: python-semantic-release/python-semantic-release@v9.21.0
         with:
