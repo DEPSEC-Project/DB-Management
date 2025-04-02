@@ -41,9 +41,23 @@ jobs:
       
       - name: Lancer les migrations
         run: |
-          flask db stamp head  # Marque la base comme étant à jour
+          flask db stamp base  # Marque la base comme étant à jour
           flask db migrate -m "Mise à jour de la base de données"
           flask db upgrade
       
       - name: Appliquer les migrations de la base de données
         run: flask db upgrade
+        
+      - name: Commit des changements de migration
+        run: |
+          git config --local user.email "migrations@depsec.org"
+          git config --local user.name "Migrations"
+          git add --dry-run --ignore-missing migrations/versions/*.py
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git commit -m "Ajout automatique des fichiers de migration"
+            echo "FICHIERS DE MIGRATION COMMITTÉS"
+            git remote set-url origin https://${{ github.actor }}:${{ secrets.TOKEN }}@github.com/${{ github.repository }}
+            git push origin ${{ github.ref_name }}
+          else
+            echo "AUCUN CHANGEMENT DE FICHIER DE MIGRATION À COMMITTER"
+          fi
