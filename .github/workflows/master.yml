@@ -42,9 +42,6 @@ jobs:
       
       - name: Vérifier et appliquer les migrations si besoin
         run: |
-          echo "🔍 Vérification des changements dans les modèles..."
-          
-          flask db migrate -m "Migration auto" || true
       
           if git diff --quiet --exit-code -- migrations/versions; then
             echo "✅ Aucun changement détecté. Pas de migration à appliquer."

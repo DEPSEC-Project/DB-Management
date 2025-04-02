@@ -39,12 +39,9 @@ jobs:
       - name: Exécution de Pylint
         run: pylint $(find . -name "*.py" -not -path "./migrations/*") --disable=W
 
-      - name: Vérifier et appliquer les migrations si besoin
+      - name: Vérifier et appliquer les migrations générées par le workflow develop
         run: |
-          echo "🔍 Vérification des changements dans les modèles..."
-          
-          flask db migrate -m "Migration auto" || true
-      
+          #pas de migratins dans ce workflow, on upgrade la bdd
           if git diff --quiet --exit-code -- migrations/versions; then
             echo "✅ Aucun changement détecté. Pas de migration à appliquer."
           else
