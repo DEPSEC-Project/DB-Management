@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.7.1 (2025-04-02)
+
+### Bug Fixes
+
+- **name_class**: Des trucs
+  ([`64b78a8`](https://github.com/DEPSEC-Project/DB-Management/commit/64b78a80f673e148acbd0dc223d8428f09a2be53))
+
+
 ## v0.7.0 (2025-04-02)
 
 ### Bug Fixes
