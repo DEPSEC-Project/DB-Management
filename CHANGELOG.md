@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v0.9.0 (2025-04-02)
+
+### Bug Fixes
+
+- **error**: Missing-function-docstring
+  ([`6a92a2e`](https://github.com/DEPSEC-Project/DB-Management/commit/6a92a2e2809acce58d3bf4b51f5dc434c66780fb))
+
+### Features
+
+- **create_function**: Cette fonction permet de retourner tous les projets
+  ([`e9b37f7`](https://github.com/DEPSEC-Project/DB-Management/commit/e9b37f7a1faead253f0486572349dd5362f322bb))
+
+
 ## v0.8.0 (2025-04-02)
 
 ### Features
