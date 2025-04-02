@@ -14,8 +14,8 @@ class Project(db.Model):
     __tablename__ = 'projects'
     
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    auteur_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # Clé étrangère vers l'id de la table User
     titre = db.Column(db.String, nullable=False)
-    auteur = db.Column(db.String, nullable=False)
     status = db.Column(db.String, nullable=False)
     path = db.Column(db.String, nullable=False)
 
@@ -34,6 +34,10 @@ class User(db.Model):
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
 
+    """Relation One-To-Many avec la table Project qui utilise l'id de User"""
+    projects = db.relationship('Project', backref='user', lazy=True)
+
+    
     def set_password(self, password: str) -> None:
         """Hash et définit le mot de passe de l'utilisateur."""
         self.password_hash = generate_password_hash(password)
