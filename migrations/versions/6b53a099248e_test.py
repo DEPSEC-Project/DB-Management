@@ -21,7 +21,7 @@ def upgrade():
     op.drop_table('sbom')
     op.drop_table('project')
     with op.batch_alter_table('trivy_reports', schema=None) as batch_op:
-        batch_op.add_column(sa.Column('sbom_id', sa.Integer(), nullable=False))
+        batch_op.add_column(sa.Column('sbom_id', sa.Integer(), nullable=True))
         batch_op.create_foreign_key(None, 'sboms', ['sbom_id'], ['id'])
 
     # ### end Alembic commands ###
