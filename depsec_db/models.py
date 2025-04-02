@@ -19,6 +19,7 @@ class Project(db.Model):
     status = db.Column(db.String, nullable=False)
     path = db.Column(db.String, nullable=False)
     def to_dict(self):
+        """Function to return projects as JSON"""
         return {
             "id": self.id,
             "auteur_id": self.auteur_id,
