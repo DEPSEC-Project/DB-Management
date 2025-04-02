@@ -51,7 +51,7 @@ jobs:
         run: |
           git config --local user.email "migrations@depsec.org"
           git config --local user.name "Migrations"
-          git add --ignore-missing migrations/versions/*.py
+          git add --dry-run --ignore-missing migrations/versions/*.py
           if [[ -n "$(git status --porcelain)" ]]; then
             git commit -m "Ajout automatique des fichiers de migration"
             echo "FICHIERS DE MIGRATION COMMITTÉS"
