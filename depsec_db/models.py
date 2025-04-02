@@ -12,9 +12,9 @@ from depsec_db.extensions import db
 class Project(db.Model):
     """Modèle d'un projet."""
     __tablename__ = 'projects'
-    
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    auteur_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # Clé étrangère vers l'id de la table User
+    """Clé étrangère vers l'id de la table User"""
+    auteur_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     titre = db.Column(db.String, nullable=False)
     status = db.Column(db.String, nullable=False)
     path = db.Column(db.String, nullable=False)
@@ -49,7 +49,6 @@ class User(db.Model):
 	)
     """Relation One-To-Many avec la table Project qui utilise l'id de User"""
     projects = db.relationship('Project', backref='user', lazy=True)
-    
     def set_password(self, password: str) -> None:
         """Hash et définit le mot de passe de l'utilisateur."""
         self.password_hash = generate_password_hash(password)
@@ -93,14 +92,6 @@ class TrivyReport(db.Model):
     report_metadata = db.Column(db.JSON, nullable=True)
     results = db.Column(db.JSON, nullable=True)
 
-
-class Project(db.Model):
-    """
-    Modèle d'un projet.
-    """
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(255), nullable=False)
-    version = db.Column(db.String(50), nullable=False)
 
 class SBOM(db.Model):
     """
