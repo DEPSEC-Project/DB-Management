@@ -1,6 +1,22 @@
 # CHANGELOG
 
 
+## v0.7.0 (2025-04-02)
+
+### Bug Fixes
+
+- **bdd**: Pb et tout quoi des choses
+  ([`39509bb`](https://github.com/DEPSEC-Project/DB-Management/commit/39509bb0d9467c3eeb276771c63470707789aa79))
+
+- **bdd**: Ya un truc qui marchait pas du coup et voila
+  ([`943eeba`](https://github.com/DEPSEC-Project/DB-Management/commit/943eeba872894d19ca88246ea32a98a1a87ea3bd))
+
+### Features
+
+- **model**: Ajout du modele des projets
+  ([`7533b8a`](https://github.com/DEPSEC-Project/DB-Management/commit/7533b8a448b19c279ede6a222cc66b8e0fab79c7))
+
+
 ## v0.6.0 (2025-04-02)
 
 ### Bug Fixes
