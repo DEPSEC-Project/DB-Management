@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Checkout du code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Installation de Python
         uses: actions/setup-python@v4
@@ -65,3 +67,4 @@ jobs:
         uses: python-semantic-release/python-semantic-release@v9.21.0
         with:
           github_token: ${{ secrets.GH_TOKEN }}
+          root_options: -vv
