@@ -2,7 +2,7 @@
 Fichier qui initialise l'application Flask
 """
 from flask import Flask
-
+from depsec_db.models import * 
 from depsec_db.config import Config
 from depsec_db.extensions import db, migrate
 
