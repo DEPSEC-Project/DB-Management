@@ -60,7 +60,6 @@ jobs:
           else
             echo "AUCUN CHANGEMENT DE FICHIER DE MIGRATION À COMMITTER"
           fi
-
       - name: Release avec semantic-release
         uses: python-semantic-release/python-semantic-release@v9.21.0
         with:
