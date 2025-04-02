@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.10.0 (2025-04-02)
+
+### Features
+
+- **ci**: Modif des migrations selon la branche
+  ([`02499e4`](https://github.com/DEPSEC-Project/DB-Management/commit/02499e4daacfffb94c571b610c780a53c38ed5bf))
+
+
 ## v0.9.0 (2025-04-02)
 
 ### Bug Fixes
