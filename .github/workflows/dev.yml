@@ -47,3 +47,17 @@ jobs:
       
       - name: Appliquer les migrations de la base de données
         run: flask db upgrade
+        
+      - name: Commit des changements de migration
+        run: |
+          git config --local user.email "${{ secrets.GITHUB_ACTIONS_EMAIL }}"
+          git config --local user.name "GitHub Actions"
+          git add migrations/versions/*
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git commit -m "Ajout automatique des fichiers de migration"
+            echo "FICHIERS DE MIGRATION COMMITTÉS"
+            git remote set-url origin https://${{ github.actor }}:${{ secrets.TOKEN }}@github.com/${{ github.repository }}
+            git push origin development
+          else
+            echo "AUCUN CHANGEMENT DE FICHIER DE MIGRATION À COMMITTER"
+          fi
