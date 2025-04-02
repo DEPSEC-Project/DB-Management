@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.10.1 (2025-04-02)
+
+### Bug Fixes
+
+- Migration sbom id peut etre null
+  ([`0c64b3d`](https://github.com/DEPSEC-Project/DB-Management/commit/0c64b3d4000b49df7fa8e0933ac4a15a5be9297a))
+
+
 ## v0.10.0 (2025-04-02)
 
 ### Features
