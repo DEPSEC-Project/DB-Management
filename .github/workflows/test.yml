@@ -41,6 +41,7 @@ jobs:
 
       - name: Vérifier et appliquer les migrations générées par le workflow develop
         run: |
+          flask db upgrade
           #pas de migratins dans ce workflow, on upgrade la bdd
           if git diff --quiet --exit-code -- migrations/versions; then
             echo "✅ Aucun changement détecté. Pas de migration à appliquer."
