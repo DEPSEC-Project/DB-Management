@@ -1,5 +1,6 @@
 [tool.semantic_release]
 branch = "main"
+version_source = "variable"
 version_variable = "setup.py:__version__"
 commit_message = "chore(release): create new version {version}"
 github_token = "${GH_TOKEN}"
