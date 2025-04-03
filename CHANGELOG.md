@@ -162,7 +162,7 @@
   ([`4894e16`](https://github.com/DEPSEC-Project/DB-Management/commit/4894e16261b1dbd74614ee9a92a378bedc227d1d))
 
 - **ci**: Désactivation des warnings dans pylint
-  ([`f66ccc5`](https://github.com/DEPSEC-Project/DB-Management/commit/f66ccc5f1fbfb3f46a61d2526594430ec79649d9))
+  ([`f66ccc5`](https://github.com/DEPSEC-Project/DB-Management/commit/f66ccc5f1fbfb3f46a61d2526594430ec79649d9)) 
 
 - **ci**: Modification de master.yml
   ([`fee2131`](https://github.com/DEPSEC-Project/DB-Management/commit/fee213137cc5e643cc8d9f92940f3393bc51b880))
