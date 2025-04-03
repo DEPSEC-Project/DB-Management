@@ -6,10 +6,12 @@ Ces modèles sont conçus pour être utilisés dans une application Flask extern
 
 import uuid
 
-from sqlalchemy import ForeignKey
+from sqlalchemy import (
+    ForeignKey,
+    func as sa_func
+)
 from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
-from sqlalchemy import func as sa_func
 
 from depsec_db.extensions import db
 
@@ -116,7 +118,7 @@ class SBOM(db.Model):
     __tablename__ = 'sboms'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     """Clé étrangère vers l'id du projet"""
-    project_id = db.Column(db.Integer, ForeignKey('projects.id', ondelete="CASCADE"), nullable=False)
+    project_id = db.Column(db.Integer, ForeignKey('projects.id',ondelete="CASCADE"),nullable=False)
     sbom_data = db.Column(db.JSON, nullable=False)
     """Relation One-To-Many avec la table TrivyReport qui utilise l'id du SBOM"""
     projects = db.relationship('TrivyReport', backref='sboms', lazy=True)
