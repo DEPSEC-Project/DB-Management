@@ -18,6 +18,8 @@ class Project(db.Model):
     titre = db.Column(db.String, nullable=False)
     status = db.Column(db.String, nullable=False)
     path = db.Column(db.String, nullable=False)
+    """Relation avec SBOM : suppression en cascade"""
+    sboms = relationship("SBOM", backref="project", cascade="all, delete", passive_deletes=True)
     def to_dict(self):
         """Function to return projects as JSON"""
         return {
@@ -109,7 +111,8 @@ class SBOM(db.Model):
     """
     __tablename__ = 'sboms'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    project_id = db.Column(db.Integer, db.ForeignKey('projects.id'), nullable=False)
+    """Clé étrangère vers l'id du projet"""
+    project_id = db.Column(db.Integer, ForeignKey('projects.id', ondelete="CASCADE"), nullable=False)
     sbom_data = db.Column(db.JSON, nullable=False)
     """Relation One-To-Many avec la table TrivyReport qui utilise l'id du SBOM"""
     projects = db.relationship('TrivyReport', backref='sboms', lazy=True)
