@@ -5,11 +5,13 @@ Ces modèles sont conçus pour être utilisés dans une application Flask extern
 """
 
 import uuid
-from werkzeug.security import generate_password_hash, check_password_hash
-from sqlalchemy import func as sa_func
-from depsec_db.extensions import db
+
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
+from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy import func as sa_func
+
+from depsec_db.extensions import db
 
 class Project(db.Model):
     """Modèle d'un projet."""
