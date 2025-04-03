@@ -4,70 +4,66 @@ Modèles SQLAlchemy pour l'application, compatibles avec Flask-SQLAlchemy.
 Ces modèles sont conçus pour être utilisés dans une application Flask externe.
 """
 
-import uuid  # ✅ 1️⃣ Import standard Python
+import uuid
 
-# ✅ 2️⃣ Imports externes (librairies installées)
-from sqlalchemy import (
-    Column, Integer, String, ForeignKey, JSON, DateTime, Boolean
-)
+from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import func as sa_func
 
-# ✅ 3️⃣ Imports internes (modules du projet)
 from depsec_db.extensions import db
-
 
 class Project(db.Model):
     """Modèle d'un projet."""
     __tablename__ = 'projects'
-    
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    auteur_id = Column(Integer, ForeignKey('users.id'), nullable=False)  # Clé étrangère vers User
-    titre = Column(String, nullable=False)
-    status = Column(String, nullable=False)
-    path = Column(String, nullable=False)
-
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    """Clé étrangère vers l'id de la table User"""
+    auteur_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    titre = db.Column(db.String, nullable=False)
+    status = db.Column(db.String, nullable=False)
+    path = db.Column(db.String, nullable=False)
     """Relation avec SBOM : suppression en cascade"""
-    sboms = relationship(
-        "SBOM", backref="project", cascade="all, delete", passive_deletes=True
-    )
-
+    sboms = relationship("SBOM", backref="project", cascade="all, delete", passive_deletes=True)
     def to_dict(self):
-        """Retourne un dictionnaire représentant le projet."""
+        """Function to return projects as JSON"""
         return {
             "id": self.id,
             "auteur_id": self.auteur_id,
             "titre": self.titre,
             "status": self.status,
             "path": self.path
-        }
-
+    }
 
 class User(db.Model):
     """Modèle utilisateur principal pour l'authentification."""
     __tablename__ = 'users'
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    public_id = Column(
-        String(36), unique=True, nullable=False, default=lambda: str(uuid.uuid4())
-    )
-    username = Column(String(255), unique=True, nullable=False)
-    email = Column(String(255), unique=True, nullable=False)
-    password_hash = Column(String(255), nullable=False)
-    full_name = Column(String(255), nullable=True)
-    is_admin = Column(Boolean, nullable=False, default=False)
-    created_at = Column(DateTime(timezone=True), server_default=sa_func.now(), nullable=False)
-    updated_at = Column(
-        DateTime(timezone=True),
-        server_default=sa_func.now(),
-        onupdate=sa_func.now(),
-        nullable=False
-    )
-
-    """Relation One-To-Many avec Project (un user peut avoir plusieurs projets)"""
-    projects = relationship('Project', backref='user', lazy=True)
-
+    id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
+    public_id = db.Column(
+		db.String(36),
+		unique=True,
+		nullable=False,
+		default=lambda: str(uuid.uuid4())
+	)
+    username = db.Column(db.String(255), unique=True, nullable=False)
+    email = db.Column(db.String(255), unique=True, nullable=False)
+    password_hash = db.Column(db.String(255), nullable=False)
+    full_name = db.Column(db.String(255), nullable=True)
+    name = db.Column(db.String(255), nullable=True)
+    is_admin = db.Column(db.Boolean, nullable=False, default=False)
+    created_at = db.Column(
+		db.DateTime(timezone=True),
+		server_default=sa_func.now(), # pylint: disable=not-callable
+		nullable=False
+	)
+    updated_at = db.Column(
+		db.DateTime(timezone=True),
+		server_default=sa_func.now(), # pylint: disable=not-callable
+		onupdate=sa_func.now(), # pylint: disable=not-callable
+		nullable=False
+	)
+    """Relation One-To-Many avec la table Project qui utilise l'id de User"""
+    projects = db.relationship('Project', backref='user', lazy=True)
     def set_password(self, password: str) -> None:
         """Hash et définit le mot de passe de l'utilisateur."""
         self.password_hash = generate_password_hash(password)
@@ -78,12 +74,12 @@ class User(db.Model):
 
 
 class TokenBlacklist(db.Model):
-    """Modèle pour stocker les JWT révoqués."""
+    """Modèle pour stocker les JWT révoqués (blacklistés)."""
     __tablename__ = 'token_blacklist'
 
-    id = Column(Integer, primary_key=True)
-    jti = Column(String(36), unique=True, nullable=False)
-    created_at = Column(DateTime(timezone=True), server_default=sa_func.now(), nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    jti = db.Column(db.String(36), unique=True, nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True), server_default=sa_func.now(), nullable=False) # pylint: disable=not-callable
 
     @classmethod
     def is_token_blacklisted(cls, jti: str, session=None) -> bool:
@@ -96,35 +92,31 @@ class TrivyReport(db.Model):
     """Modèle représentant un rapport d'analyse Trivy."""
     __tablename__ = 'trivy_reports'
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    schema_version = Column(Integer, nullable=False)
-    
-    """Clé étrangère vers SBOM"""
-    sbom_id = Column(Integer, ForeignKey('sboms.id'), nullable=False)
-    
-    created_at = Column(
-        DateTime(timezone=True),
-        server_default=sa_func.now(),
-        default=sa_func.now(),
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    schema_version = db.Column(db.Integer, nullable=False)
+    """Clé étrangère vers l'id de la table SBOM"""
+    sbom_id = db.Column(db.Integer, db.ForeignKey('sboms.id'), nullable=False)
+    created_at = db.Column(
+        db.DateTime(timezone=True),
+        server_default=sa_func.now(),  # pylint: disable=not-callable
+        default=sa_func.now(),  # pylint: disable=not-callable
         nullable=False
     )
 
-    artifact_name = Column(String, nullable=False)
-    artifact_type = Column(String, nullable=False)
-    report_metadata = Column(JSON, nullable=True)
-    results = Column(JSON, nullable=True)
+    artifact_name = db.Column(db.String, nullable=False)
+    artifact_type = db.Column(db.String, nullable=False)
+    report_metadata = db.Column(db.JSON, nullable=True)
+    results = db.Column(db.JSON, nullable=True)
 
 
 class SBOM(db.Model):
-    """Modèle d'un SBOM."""
+    """
+    Modèle d'un SBOM.
+    """
     __tablename__ = 'sboms'
-
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    
-    """Clé étrangère vers Project avec suppression en cascade"""
-    project_id = Column(Integer, ForeignKey('projects.id', ondelete="CASCADE"), nullable=False)
-    
-    sbom_data = Column(JSON, nullable=False)
-
-    """Relation One-To-Many avec TrivyReport"""
-    trivy_reports = relationship('TrivyReport', backref='sbom', lazy=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    """Clé étrangère vers l'id du projet"""
+    project_id = db.Column(db.Integer, ForeignKey('projects.id', ondelete="CASCADE"), nullable=False)
+    sbom_data = db.Column(db.JSON, nullable=False)
+    """Relation One-To-Many avec la table TrivyReport qui utilise l'id du SBOM"""
+    projects = db.relationship('TrivyReport', backref='sboms', lazy=True)
